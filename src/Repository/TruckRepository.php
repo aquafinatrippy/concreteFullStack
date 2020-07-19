@@ -19,6 +19,14 @@ class TruckRepository extends ServiceEntityRepository
         parent::__construct($registry, Truck::class);
     }
 
+    public function getTrucks()
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     // /**
     //  * @return Truck[] Returns an array of Truck objects
     //  */

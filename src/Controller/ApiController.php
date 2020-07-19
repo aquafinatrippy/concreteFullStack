@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Truck;
+use App\Repository\TruckRepository;
 
 class ApiController extends AbstractController
 {
@@ -27,6 +28,13 @@ class ApiController extends AbstractController
     public function showProducts(ProductRepository $productRepository)
     {
         $data = $productRepository->getProductsData();
+        return $this->json($data);
+    }
+    /**
+     * @Route("/trucks", name="trucks")
+     */
+    public function showTrucks(TruckRepository $truckRepository){
+        $data = $truckRepository->getTrucks();
         return $this->json($data);
     }
     /**
