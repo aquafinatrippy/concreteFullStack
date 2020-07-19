@@ -41,14 +41,15 @@ class ApiController extends AbstractController
             true
         );
         $entityManager = $this->getDoctrine()->getManager();
+        $max = $data["max"];
+        $license = $data["license"];
         $truck = new Truck();
         $truck->setLoaded("yes");
-        $truck->setMaxLoad($data["max"]);
-        $truck->setLicensePlate($data["license"]);
+        $truck->setMaxLoad($max);
+        $truck->setLicensePlate($license);
 
 
-        $max = $data["max"];
-        $lic = $data["license"];
+        
 
         foreach ($productRepository->findLessThanWeight($max) as $key => $value) {
             $leftOver = $max - $value->getWeight();
@@ -56,18 +57,19 @@ class ApiController extends AbstractController
             $prod = $productRepository->find($value->getId());
 
 
-            $prod->setOnTruck($lic);
+            $prod->setOnTruck($license);
 
 
             if ($addonProduct) {
                 foreach ($addonProduct as $k => $v) {
                     $extraProd = $productRepository->find($v->getId());
-                    $extraProd->setOnTruck($lic);
+                    $extraProd->setOnTruck($license);
                 }
             } else {
                 var_dump('nothing to add');
             }
         }
+
 
         $entityManager->persist($truck);
         $entityManager->flush();

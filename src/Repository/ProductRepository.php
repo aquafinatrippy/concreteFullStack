@@ -36,11 +36,12 @@ class ProductRepository extends ServiceEntityRepository
     }
     */
 
-    public function getProductsData(){
+    public function getProductsData()
+    {
         return $this->createQueryBuilder('p')
-        ->select('p')
-        ->getQuery()
-        ->getArrayResult();
+            ->select('p')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /*
@@ -61,7 +62,6 @@ class ProductRepository extends ServiceEntityRepository
             ->setMaxResults(4)
             ->getQuery()
             ->execute();
-
     }
 
     public function findLessThanWeight($weight): array
@@ -69,6 +69,7 @@ class ProductRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.weight < :weight')
             ->setParameter('weight', $weight)
+            ->andWhere('p.onTruck is NULL')
             ->orderBy('p.weight', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
