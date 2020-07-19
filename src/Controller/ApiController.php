@@ -13,24 +13,6 @@ use App\Repository\TruckRepository;
 class ApiController extends AbstractController
 {
     /**
-     * @Route("/api", name="api")
-     */
-    public function index()
-    {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/ApiController.php',
-        ]);
-    }
-    /**
-     * @Route("/products", name="products")
-     */
-    public function showProducts(ProductRepository $productRepository)
-    {
-        $data = $productRepository->getProductsData();
-        return $this->json($data);
-    }
-    /**
      * @Route("/trucks", name="trucks")
      */
     public function showTrucks(TruckRepository $truckRepository)
