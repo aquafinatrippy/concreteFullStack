@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Truck;
 
 class ApiController extends AbstractController
@@ -33,12 +32,24 @@ class ApiController extends AbstractController
     /**
      * @Route("/addTruck", name="addTruck", methods={"POST"})
      */
-    public function addTruck(Request $request, ProductRepository $productRepository)
-    {
+    public function addTruck(
+        Request $request,
+        ProductRepository $productRepository
+    ) {
         $data = json_decode(
             $request->getContent(),
             true
         );
+        $entityManager = $this->getDoctrine()->getManager();
+        $truck = new Truck();
+        $truck->setLoaded("yes");
+        $truck->setMaxLoad($data["max"]);
+        $truck->setLicensePlate($data["license"]);
+        $entityManager->persist($truck);
+        $entityManager->flush();
+
+
+        var_dump(json_encode($data));
         //exit(\Doctrine\Common\Util\Debug::dump($data));
         return new JsonResponse($data, JsonResponse::HTTP_CREATED);
     }
