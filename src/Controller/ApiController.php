@@ -45,6 +45,30 @@ class ApiController extends AbstractController
         $truck->setLoaded("yes");
         $truck->setMaxLoad($data["max"]);
         $truck->setLicensePlate($data["license"]);
+
+
+        $max = $data["max"];
+        $lic = $data["license"];
+
+        foreach ($productRepository->findLessThanWeight($max) as $key => $value) {
+            $leftOver = $max - $value->getWeight();
+            $addonProduct = $productRepository->findLessThanWeight($leftOver);
+            $prod = $productRepository->find($value->getId());
+
+
+            $prod->setOnTruck($lic);
+
+
+            if ($addonProduct) {
+                foreach ($addonProduct as $k => $v) {
+                    $extraProd = $productRepository->find($v->getId());
+                    $extraProd->setOnTruck($lic);
+                }
+            } else {
+                var_dump('nothing to add');
+            }
+        }
+
         $entityManager->persist($truck);
         $entityManager->flush();
 
