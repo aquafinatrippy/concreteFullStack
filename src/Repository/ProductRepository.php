@@ -44,17 +44,16 @@ class ProductRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    /*
-    public function findOneBySomeField($value): ?Product
+
+    public function findOnTruck($value)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
+            ->andWhere('p.onTruck = :val')
             ->setParameter('val', $value)
+            ->setMaxResults(2)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getArrayResult();
     }
-    */
     public function orderWeight(): array
     {
         return $this->createQueryBuilder('p')

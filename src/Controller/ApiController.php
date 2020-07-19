@@ -33,9 +33,21 @@ class ApiController extends AbstractController
     /**
      * @Route("/trucks", name="trucks")
      */
-    public function showTrucks(TruckRepository $truckRepository){
+    public function showTrucks(TruckRepository $truckRepository)
+    {
         $data = $truckRepository->getTrucks();
         return $this->json($data);
+    }
+    /**
+     * @Route("/newest", name="newest")
+     */
+    public function getLatestOnTruck(ProductRepository $productRepository, TruckRepository $truckRepository)
+    {
+        $find = $truckRepository->findBy(array(), array('id' => 'DESC'), 1, 0);
+        foreach ($find as $key => $value) {
+            $res = $productRepository->findOnTruck($value->getLicensePlate());
+        }
+        return $this->json($res);
     }
     /**
      * @Route("/addTruck", name="addTruck", methods={"POST"})
@@ -57,7 +69,7 @@ class ApiController extends AbstractController
         $truck->setLicensePlate($license);
 
 
-        
+
 
         foreach ($productRepository->findLessThanWeight($max) as $key => $value) {
             $leftOver = $max - $value->getWeight();

@@ -27,6 +27,17 @@ class TruckRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function selectLatest(): array
+    {
+        return $this
+            ->createQueryBuilder("e")
+            ->orderBy("e.id", "DESC")
+            ->setMaxResults(1)
+            ->getQuery()
+            ->execute();
+    }
+
+
     // /**
     //  * @return Truck[] Returns an array of Truck objects
     //  */
