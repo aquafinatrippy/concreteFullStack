@@ -13,14 +13,16 @@ class ProductFixtures extends Fixture
     {
 
         $faker = Factory::create();
+        $zero = 0;
 
-
-
-        for ($i = 0; $i < 100; $i++) {
+        while ($zero <= 100000) {
+            $weightGen = $faker->numberBetween(55, 5555);
             $product = new Product();
             $product->setName($faker->sentence());
-            $product->setWeight($faker->numberBetween(55, 5555));
+            $product->setWeight($weightGen);
             $manager->persist($product);
+
+            $zero += $weightGen;
         }
 
 
