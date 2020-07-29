@@ -74,25 +74,29 @@ class ApiController extends AbstractController
         $f = getClosest($max, $products);
 
         $sum = $max - $f["number"];
-        var_dump("start sum" . $sum);
-        while ($sum >= 0) {
+        $res = array();
+
+        while ($max >= 0) {
+
 
 
             $addon = getClosest($sum, $products);
             var_dump("addon" . $addon["number"]);
 
-            $sum -= $addon["number"];
-            if ($sum <= $addon["number"]) {
+            array_push($res, getClosest($max, $products));
+
+            $max -= $f["number"];
+            var_dump("sum" . $sum);
+
+            if ($max <= $addon["number"] || 0) {
                 break;
             }
             if ($sum <= 0) {
                 break;
             }
-
-
-            var_dump("sum" . $sum);
-            //var_dump(getClosest($max, $products));
         }
+
+        var_dump($res);
 
 
 
@@ -105,12 +109,13 @@ class ApiController extends AbstractController
             $entityManager->resetManager();
         }
 
-        try {
-            $productRepository->findOneBy(["id" => $f["id"]])->setOnTruck($truck->getId());
-            $entityManager->flush();
-        } catch (\Exception $e) {
-            $entityManager->resetManager();
-        }
+        // try {
+        //     $productRepository->findOneBy(["id" => $f["id"]])->setOnTruck($truck->getId());
+        //     $productRepository->findOneBy(["id" => $addon["id"]])->setOnTruck($truck->getId());
+        //     $entityManager->flush();
+        // } catch (\Exception $e) {
+        //     $entityManager->resetManager();
+        // }
 
 
 
