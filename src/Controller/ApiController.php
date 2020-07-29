@@ -70,6 +70,7 @@ class ApiController extends AbstractController
         $truck->setMaxLoad($max);
         $products = $productRepository->getProductsData();
         $res = array();
+
         $firstLoad = $this->getClosest($max, $products);
         $sum = $max - $firstLoad["number"];
         $transPrice = 60;
@@ -92,22 +93,19 @@ class ApiController extends AbstractController
             );
         }
 
-
+        $jaak = 0;
         while ($max >= 0) {
-            $curr = $this->getClosest($max, $products);
-            var_dump($curr["number"]);
+            $addon = $this->getClosest($sum, $products);
 
-            $max -= $firstLoad["number"];
             array_push($res, $this->getClosest($max, $products));
 
-
-
-            // if ($max <= $addon["number"] || 0) {
-            //     break;
-            // }
-            // if ($sum <= 0) {
-            //     break;
-            // }
+            $max -= $firstLoad["number"];
+            if ($max <= $addon["number"] || 0) {
+                break;
+            }
+            if ($sum <= 0) {
+                break;
+            }
         }
 
 
