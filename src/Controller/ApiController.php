@@ -67,6 +67,9 @@ class ApiController extends AbstractController
         $truck->setLoaded(true);
         $truck->setMaxLoad($max);
         $products = $productRepository->getProductsData();
+        $res = array();
+        $firstLoad = $this->getClosest($max, $products);
+        $sum = $max - $firstLoad["number"];
 
         if ($max < 1000) {
             return new JsonResponse(
@@ -80,17 +83,13 @@ class ApiController extends AbstractController
             );
         }
 
-        $f = $this->getClosest($max, $products);
-
-        $sum = $max - $f["number"];
-        $res = array();
 
         while ($max >= 0) {
             $addon = $this->getClosest($sum, $products);
 
             array_push($res, $this->getClosest($max, $products));
 
-            $max -= $f["number"];
+            $max -= $firstLoad["number"];
             if ($max <= $addon["number"] || 0) {
                 break;
             }
