@@ -17,9 +17,11 @@ class ApiController extends AbstractController
     {
         $closest = null;
         foreach ($arr as $item) {
-            if ($closest === null || abs($search - $closest) > abs($item["weight"] - $search) && $item["weight"] <= $search && $item["onTruck"] == 0 | NULL) {
-                $closest = $item["weight"];
-                $id = $item["id"];
+            if ($item["onTruck"] === NULL) {
+                if ($closest === null || abs($search - $closest) > abs($item["weight"] - $search) && $item["weight"] <= $search) {
+                    $closest = $item["weight"];
+                    $id = $item["id"];
+                }
             }
         }
         return array("number" => $closest, "id" => $id);
@@ -71,6 +73,7 @@ class ApiController extends AbstractController
         $firstLoad = $this->getClosest($max, $products);
         $sum = $max - $firstLoad["number"];
         $transPrice = 60;
+        $totalWeight = 0;
 
         if ($max < 1000) {
             return new JsonResponse(
@@ -91,23 +94,27 @@ class ApiController extends AbstractController
 
 
         while ($max >= 0) {
-            $addon = $this->getClosest($sum, $products);
-
-            array_push($res, $this->getClosest($max, $products));
+            $curr = $this->getClosest($max, $products);
+            var_dump($curr["number"]);
 
             $max -= $firstLoad["number"];
-            var_dump($max);
-            if ($max <= $addon["number"] || 0) {
-                break;
-            }
-            if ($sum <= 0) {
-                break;
-            }
+            array_push($res, $this->getClosest($max, $products));
+
+
+
+            // if ($max <= $addon["number"] || 0) {
+            //     break;
+            // }
+            // if ($sum <= 0) {
+            //     break;
+            // }
         }
+
 
         try {
             foreach ($res as $k => $v) {
                 $transPrice += intval($v["number"] / 50);
+                $totalWeight += $v["number"];
             }
             $truck->setTransportPrice($transPrice + count($res));
             $this->entityManager->persist($truck);
