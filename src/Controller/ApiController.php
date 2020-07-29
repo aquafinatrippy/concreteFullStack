@@ -91,21 +91,32 @@ class ApiController extends AbstractController
         }
 
         $i = 0;
-        while ($max >= 0) {
-
-            $i++;
-            var_dump($i . " is " . $max);
-            $addon = $this->getClosest($max, $products);
-            var_dump($addon["number"]);
-
-
-            $total = 0 + $addon["number"];
-            if ($total > $data["max"]) {
-                break;
+        $z = 0;
+        $total = 0;
+        while ($z <= $max) {
+            if ($i === 0) {
+                $addon = $this->getClosest($max, $products);
+                $total += $addon["number"];
+                $z += $addon["number"];
+                array_push($res, $this->getClosest($z, $products));
+            } elseif ($i === 1) {
+                $total = $max - $total;
+                if ($total > $data["max"]) {
+                    break;
+                }
+                $addon = $this->getClosest($total, $products);
+                $z += $addon["number"];
+                array_push($res, $this->getClosest($total, $products));
+            } else {
+                $total = $max - $z;
+                $addon = $this->getClosest($total, $products);
+                $z += $addon["number"];
+                if ($z > $data["max"]) {
+                    break;
+                }
+                array_push($res, $this->getClosest($total, $products));
             }
-            var_dump("total is" . $total);
-            array_push($res, $this->getClosest($max, $products));
-            $max -= $addon["number"];
+            $i++;
         }
 
 
