@@ -9,10 +9,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Truck;
 use App\Repository\TruckRepository;
-use PhpParser\Node\Stmt\TryCatch;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ApiController extends AbstractController
 {
+    private $entityManager;
+
+    public function __construct(
+        EntityManagerInterface $entityManager
+    ) {
+        $this->entityManager = $entityManager;
+    }
     /**
      * @Route("/trucks", name="trucks")
      */
@@ -56,19 +63,13 @@ class ApiController extends AbstractController
             );
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
+
         $max = $data["max"];
         $truck = new Truck();
         $truck->setLoaded(true);
         $truck->setMaxLoad($max);
 
         $products = $productRepository->getProductsData();
-
-
-        if ($max <= 55 && $max > 8000) {
-            $msg = array("ERROR" => "Invalid max truck load number");
-            return new JsonResponse(json_decode($msg), JsonResponse::HTTP_CREATED);
-        }
 
 
 
@@ -115,20 +116,25 @@ class ApiController extends AbstractController
 
         try {
             // first transaction
-            $entityManager->persist($truck);
-            $entityManager->flush();
+            $this->entityManager->persist($truck);
+            $this->entityManager->flush();
         } catch (\Exception $e) {
-            /* ... handle the exception */
-            $entityManager->resetManager();
+            return new JsonResponse(
+                ["error" => $e->getMessage()],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
         }
 
         try {
             foreach ($res as $sRes) {
                 $productRepository->findOneBy(["id" => $sRes["id"]])->setOnTruck($truck->getId());
             }
-            $entityManager->flush();
+            $this->entityManager->flush();
         } catch (\Exception $e) {
-            $entityManager->resetManager();
+            return new JsonResponse(
+                ["error" => $e->getMessage()],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
         }
 
 
