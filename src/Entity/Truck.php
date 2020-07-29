@@ -17,49 +17,23 @@ class Truck
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $licensePlate;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $loaded;
 
     /**
      * @ORM\Column(type="integer")
      */
     private $maxLoad;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $loaded;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLicensePlate(): ?string
-    {
-        return $this->licensePlate;
-    }
 
-    public function setLicensePlate(string $licensePlate): self
-    {
-        $this->licensePlate = $licensePlate;
-
-        return $this;
-    }
-
-    public function getLoaded(): ?string
-    {
-        return $this->loaded;
-    }
-
-    public function setLoaded(?string $loaded): self
-    {
-        $this->loaded = $loaded;
-
-        return $this;
-    }
 
     public function getMaxLoad(): ?int
     {
@@ -69,6 +43,18 @@ class Truck
     public function setMaxLoad(int $maxLoad): self
     {
         $this->maxLoad = $maxLoad;
+
+        return $this;
+    }
+
+    public function getLoaded(): ?bool
+    {
+        return $this->loaded;
+    }
+
+    public function setLoaded(?bool $loaded): self
+    {
+        $this->loaded = $loaded;
 
         return $this;
     }

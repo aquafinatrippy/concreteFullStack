@@ -28,9 +28,10 @@ class Product
     private $weight;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $onTruck;
+
 
     public function getId(): ?int
     {
@@ -61,15 +62,17 @@ class Product
         return $this;
     }
 
-    public function getOnTruck(): ?string
+    public function getOnTruck(): ?int
     {
         return $this->onTruck;
     }
 
-    public function setOnTruck(?string $onTruck): self
+    public function setOnTruck(?int $onTruck): self
     {
         $this->onTruck = $onTruck;
 
         return $this;
     }
+
+ 
 }

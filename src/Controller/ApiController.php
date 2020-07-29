@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Truck;
 use App\Repository\TruckRepository;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ApiController extends AbstractController
 {
@@ -25,11 +26,11 @@ class ApiController extends AbstractController
      */
     public function getLatestOnTruck(ProductRepository $productRepository, TruckRepository $truckRepository)
     {
-        $find = $truckRepository->findBy(array(), array('id' => 'DESC'), 1, 0);
-        foreach ($find as $key => $value) {
-            $res = $productRepository->findOnTruck($value->getLicensePlate());
-        }
-        return $this->json($res);
+        // $find = $truckRepository->findBy(array(), array('id' => 'DESC'), 1, 0);
+        // foreach ($find as $key => $value) {
+        //     $res = $productRepository->findOnTruck($value->getLicensePlate());
+        // }
+        // return $this->json($res);
     }
     /**
      * @Route("/addTruck", name="addTruck", methods={"POST"})
@@ -44,37 +45,82 @@ class ApiController extends AbstractController
         );
         $entityManager = $this->getDoctrine()->getManager();
         $max = $data["max"];
-        $license = $data["license"];
         $truck = new Truck();
-        $truck->setLoaded("yes");
+        $truck->setLoaded(true);
         $truck->setMaxLoad($max);
-        $truck->setLicensePlate($license);
+
+        $products = $productRepository->getProductsData();
 
 
-
-
-        foreach ($productRepository->findLessThanWeight($max) as $key => $value) {
-            $leftOver = $max - $value->getWeight();
-            $addonProduct = $productRepository->findLessThanWeight($leftOver);
-            $prod = $productRepository->find($value->getId());
-
-
-            $prod->setOnTruck($license);
-
-
-            if ($addonProduct) {
-                foreach ($addonProduct as $k => $v) {
-                    $extraProd = $productRepository->find($v->getId());
-                    $extraProd->setOnTruck($license);
-                }
-            } else {
-                var_dump('nothing to add');
-            }
+        if ($max <= 55 && $max > 8000) {
+            $msg = array("ERROR" => "Invalid max truck load number");
+            return new JsonResponse(json_decode($msg), JsonResponse::HTTP_CREATED);
         }
 
 
-        $entityManager->persist($truck);
-        $entityManager->flush();
+
+        function getClosest($search, $arr)
+        {
+            $closest = null;
+            foreach ($arr as $item) {
+                if ($closest === null || abs($search - $closest) > abs($item["weight"] - $search) && $item["weight"] <= $search) {
+                    $closest = $item["weight"];
+                    $id = $item["id"];
+                }
+            }
+            return array("number" => $closest, "id" => $id);
+        }
+
+        $f = getClosest($max, $products);
+
+        $sum = $max - $f["number"];
+        var_dump("start sum" . $sum);
+        while ($sum >= 0) {
+
+
+            $addon = getClosest($sum, $products);
+            var_dump("addon" . $addon["number"]);
+
+            $sum -= $addon["number"];
+            if ($sum <= $addon["number"]) {
+                break;
+            }
+            if ($sum <= 0) {
+                break;
+            }
+
+
+            var_dump("sum" . $sum);
+            //var_dump(getClosest($max, $products));
+        }
+
+
+
+        try {
+            // first transaction
+            $entityManager->persist($truck);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            /* ... handle the exception */
+            $entityManager->resetManager();
+        }
+
+        try {
+            $productRepository->findOneBy(["id" => $f["id"]])->setOnTruck($truck->getId());
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            $entityManager->resetManager();
+        }
+
+
+
+
+
+
+
+
+
+
 
 
         var_dump(json_encode($data));
