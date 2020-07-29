@@ -95,6 +95,9 @@ class ApiController extends AbstractController
             array_push($res, $this->getClosest($max, $products));
 
             $max -= $firstLoad["number"];
+            if ($max <= $firstLoad["number"]) {
+                break;
+            }
             if ($max <= $addon["number"] || 0) {
                 break;
             }
@@ -126,8 +129,6 @@ class ApiController extends AbstractController
             );
         }
 
-        var_dump(json_encode($data));
-        //exit(\Doctrine\Common\Util\Debug::dump($data));
-        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
+        return new JsonResponse(["truckId" => $truck->getId(), "loadedWeight" => $data], JsonResponse::HTTP_CREATED);
     }
 }

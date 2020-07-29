@@ -44,34 +44,4 @@ class ProductRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-
-    public function findOnTruck($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.onTruck = :val')
-            ->setParameter('val', $value)
-            ->setMaxResults(2)
-            ->getQuery()
-            ->getArrayResult();
-    }
-    public function orderWeight(): array
-    {
-        return $this->createQueryBuilder('p')
-            ->orderBy('p.weight', 'DESC')
-            ->setMaxResults(4)
-            ->getQuery()
-            ->execute();
-    }
-
-    public function findLessThanWeight($weight): array
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.weight < :weight')
-            ->setParameter('weight', $weight)
-            ->andWhere('p.onTruck is NULL')
-            ->orderBy('p.weight', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->execute();
-    }
 }
