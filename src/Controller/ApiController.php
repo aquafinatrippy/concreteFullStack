@@ -70,6 +70,7 @@ class ApiController extends AbstractController
         $res = array();
         $firstLoad = $this->getClosest($max, $products);
         $sum = $max - $firstLoad["number"];
+        $transPrice = 60;
 
         if ($max < 1000) {
             return new JsonResponse(
@@ -95,9 +96,7 @@ class ApiController extends AbstractController
             array_push($res, $this->getClosest($max, $products));
 
             $max -= $firstLoad["number"];
-            if ($max <= $firstLoad["number"]) {
-                break;
-            }
+            var_dump($max);
             if ($max <= $addon["number"] || 0) {
                 break;
             }
@@ -107,7 +106,10 @@ class ApiController extends AbstractController
         }
 
         try {
-            // first transaction
+            foreach ($res as $k => $v) {
+                $transPrice += intval($v["number"] / 50);
+            }
+            $truck->setTransportPrice($transPrice + count($res));
             $this->entityManager->persist($truck);
             $this->entityManager->flush();
         } catch (\Exception $e) {
@@ -128,6 +130,7 @@ class ApiController extends AbstractController
                 JsonResponse::HTTP_BAD_REQUEST
             );
         }
+
 
         return new JsonResponse(["truckId" => $truck->getId(), "loadedWeight" => $data], JsonResponse::HTTP_CREATED);
     }

@@ -36,6 +36,11 @@ class Truck
      */
     private $loaded;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $transportPrice;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,6 +68,18 @@ class Truck
     public function setLoaded(?bool $loaded): self
     {
         $this->loaded = $loaded;
+
+        return $this;
+    }
+
+    public function getTransportPrice(): ?int
+    {
+        return $this->transportPrice;
+    }
+
+    public function setTransportPrice(int $transportPrice): self
+    {
+        $this->transportPrice = $transportPrice;
 
         return $this;
     }
