@@ -13,6 +13,18 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ApiController extends AbstractController
 {
+    private function getClosest($search, $arr)
+    {
+        $closest = null;
+        foreach ($arr as $item) {
+            if ($closest === null || abs($search - $closest) > abs($item["weight"] - $search) && $item["weight"] <= $search && $item["onTruck"] == 0 | NULL) {
+                $closest = $item["weight"];
+                $id = $item["id"];
+            }
+        }
+        return array("number" => $closest, "id" => $id);
+    }
+
     private $entityManager;
 
     public function __construct(
@@ -50,58 +62,35 @@ class ApiController extends AbstractController
             $request->getContent(),
             true
         );
+        $max = $data["max"];
+        $truck = new Truck();
+        $truck->setLoaded(true);
+        $truck->setMaxLoad($max);
+        $products = $productRepository->getProductsData();
 
-        if ($data["max"] < 1000) {
+        if ($max < 1000) {
             return new JsonResponse(
                 ["error" => "Minimum number is 1000"],
                 JsonResponse::HTTP_BAD_REQUEST
             );
-        } elseif ($data["max"] > 8000) {
+        } elseif ($max > 8000) {
             return new JsonResponse(
                 ["error" => "Maximum number is 8000"],
                 JsonResponse::HTTP_BAD_REQUEST
             );
         }
 
-
-        $max = $data["max"];
-        $truck = new Truck();
-        $truck->setLoaded(true);
-        $truck->setMaxLoad($max);
-
-        $products = $productRepository->getProductsData();
-
-
-
-        function getClosest($search, $arr)
-        {
-            $closest = null;
-            foreach ($arr as $item) {
-                if ($closest === null || abs($search - $closest) > abs($item["weight"] - $search) && $item["weight"] <= $search && $item["onTruck"] == 0 | NULL) {
-                    $closest = $item["weight"];
-                    $id = $item["id"];
-                }
-            }
-            return array("number" => $closest, "id" => $id);
-        }
-
-        $f = getClosest($max, $products);
+        $f = $this->getClosest($max, $products);
 
         $sum = $max - $f["number"];
         $res = array();
 
         while ($max >= 0) {
+            $addon = $this->getClosest($sum, $products);
 
-
-
-            $addon = getClosest($sum, $products);
-            var_dump("addon" . $addon["number"]);
-
-            array_push($res, getClosest($max, $products));
+            array_push($res, $this->getClosest($max, $products));
 
             $max -= $f["number"];
-            var_dump("sum" . $sum);
-
             if ($max <= $addon["number"] || 0) {
                 break;
             }
@@ -109,10 +98,6 @@ class ApiController extends AbstractController
                 break;
             }
         }
-
-        //var_dump($res);
-
-
 
         try {
             // first transaction
@@ -136,11 +121,6 @@ class ApiController extends AbstractController
                 JsonResponse::HTTP_BAD_REQUEST
             );
         }
-
-
-
-
-
 
         var_dump(json_encode($data));
         //exit(\Doctrine\Common\Util\Debug::dump($data));
