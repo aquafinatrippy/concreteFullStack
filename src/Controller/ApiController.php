@@ -43,6 +43,19 @@ class ApiController extends AbstractController
             $request->getContent(),
             true
         );
+
+        if ($data["max"] < 1000) {
+            return new JsonResponse(
+                ["error" => "Minimum number is 1000"],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        } elseif ($data["max"] > 8000) {
+            return new JsonResponse(
+                ["error" => "Maximum number is 8000"],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
         $max = $data["max"];
         $truck = new Truck();

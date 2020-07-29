@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TruckRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TruckRepository::class)
@@ -20,6 +21,13 @@ class Truck
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(
+     * min = 1000,
+     * max = 8000,
+     * minMessage = "Minimum number is 1000",
+     * maxMessage = "Maximum number is 8000"
+     * )
+     * @Assert\NotBlank()
      */
     private $maxLoad;
 
