@@ -47,11 +47,9 @@ class ApiController extends AbstractController
      */
     public function getLatestOnTruck(ProductRepository $productRepository, TruckRepository $truckRepository)
     {
-        // $find = $truckRepository->findBy(array(), array('id' => 'DESC'), 1, 0);
-        // foreach ($find as $key => $value) {
-        //     $res = $productRepository->findOnTruck($value->getLicensePlate());
-        // }
-        // return $this->json($res);
+        $find = $truckRepository->findAll();
+        $res = $find;
+        return $this->json($res);
     }
     /**
      * @Route("/addTruck", name="addTruck", methods={"POST"})

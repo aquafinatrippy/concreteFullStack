@@ -8,8 +8,6 @@ import { Truck } from '../../models/truck';
   styleUrls: ['./add-truck.component.sass'],
 })
 export class AddTruckComponent implements OnInit {
-  license: string;
-  maxload: number;
   obj: {};
   trucks: Truck[];
   show: boolean;
@@ -26,14 +24,9 @@ export class AddTruckComponent implements OnInit {
     });
   }
 
-  Onenter(val1: string, val2: number) {
-    this.license = val1;
-    this.maxload = val2;
-    this.obj = {
-      license: this.license,
-      maxload: this.maxload,
-    };
-    this.serv.addTruck(this.obj).subscribe((data) => {
+  Onenter(val1) {
+    this.serv.addTruck(parseInt(val1)).subscribe((data) => {
+      console.log(data);
       this.getTrucks();
     });
     this.show = true;

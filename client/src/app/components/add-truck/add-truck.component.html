@@ -1,10 +1,9 @@
 <div class="container">
   <div class="container__item">
     <form class="form">
-      <input type="text" class="form__field" placeholder="License plate" #lic />
-      <input type="text" class="form__field" placeholder="Max load" #load />
+      <input type="number" class="form__field" placeholder="Max load" #load />
       <button
-        (click)="Onenter(lic.value, load.value)"
+        (click)="Onenter(load.value)"
         type="button"
         class="btn btn--primary uppercase"
       >
@@ -13,7 +12,7 @@
     </form>
   </div>
 </div>
-<div *ngIf="show == true; else hide">
+<!-- <div *ngIf="show == true; else hide">
   <app-loaded-truck></app-loaded-truck>
 </div>
-<ng-template #hide></ng-template>
+<ng-template #hide></ng-template> -->

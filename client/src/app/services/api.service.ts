@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Truck } from '../models/truck';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private url = 'http://localhost:8000/addTruck';
-  private productsUrl = 'http://localhost:8000/trucks';
-  private resUrl = 'http://localhost:8000/newest';
+  private url = `${environment.apiUrl}/addTruck`;
+  private productsUrl = `${environment.apiUrl}/trucks`;
+  private resUrl = `${environment.apiUrl}/newest`;
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<Truck[]> {
@@ -17,11 +18,11 @@ export class ApiService {
     return this.http.get<Truck[]>(this.productsUrl, { headers: headers });
   }
 
-  addTruck(data) {
+  addTruck(nr) {
     let objData = {
-      license: data.license,
-      max: data.maxload,
+      max: nr
     };
+    console.log(objData);
     return this.http.post<{}>(this.url, objData);
   }
 
