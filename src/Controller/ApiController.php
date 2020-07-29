@@ -63,7 +63,7 @@ class ApiController extends AbstractController
         {
             $closest = null;
             foreach ($arr as $item) {
-                if ($closest === null || abs($search - $closest) > abs($item["weight"] - $search) && $item["weight"] <= $search) {
+                if ($closest === null || abs($search - $closest) > abs($item["weight"] - $search) && $item["weight"] <= $search && $item["onTruck"] == 0 | NULL) {
                     $closest = $item["weight"];
                     $id = $item["id"];
                 }
@@ -111,12 +111,6 @@ class ApiController extends AbstractController
         } catch (\Exception $e) {
             $entityManager->resetManager();
         }
-
-
-
-
-
-
 
 
 
