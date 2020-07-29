@@ -35,21 +35,21 @@ class ApiController extends AbstractController
         $this->entityManager = $entityManager;
     }
     /**
-     * @Route("/trucks", name="trucks")
+     * @Route("/truck/{id}", name="truck")
      */
-    public function showTrucks(TruckRepository $truckRepository)
-    {
-        $data = $truckRepository->getTrucks();
-        return $this->json($data);
-    }
-    /**
-     * @Route("/newest", name="newest")
-     */
-    public function getLatestOnTruck(ProductRepository $productRepository, TruckRepository $truckRepository)
-    {
-        $find = $truckRepository->findAll();
-        $res = $find;
-        return $this->json($res);
+    public function truck(
+        Request $request,
+        $id,
+        ProductRepository $productRepository
+    ) {
+        $res = $productRepository->findById(intval($id));
+        if ($res == NULL) {
+            return new JsonResponse(
+                ["error" => "No data found"],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+        return new JsonResponse(["data" => $res], JsonResponse::HTTP_CREATED);
     }
     /**
      * @Route("/addTruck", name="addTruck", methods={"POST"})
