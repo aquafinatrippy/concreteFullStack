@@ -96,7 +96,7 @@ class ApiController extends AbstractController
             }
         }
 
-        var_dump($res);
+        //var_dump($res);
 
 
 
@@ -109,13 +109,14 @@ class ApiController extends AbstractController
             $entityManager->resetManager();
         }
 
-        // try {
-        //     $productRepository->findOneBy(["id" => $f["id"]])->setOnTruck($truck->getId());
-        //     $productRepository->findOneBy(["id" => $addon["id"]])->setOnTruck($truck->getId());
-        //     $entityManager->flush();
-        // } catch (\Exception $e) {
-        //     $entityManager->resetManager();
-        // }
+        try {
+            foreach ($res as $sRes) {
+                $productRepository->findOneBy(["id" => $sRes["id"]])->setOnTruck($truck->getId());
+            }
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            $entityManager->resetManager();
+        }
 
 
 
