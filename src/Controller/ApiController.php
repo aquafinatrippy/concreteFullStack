@@ -81,6 +81,11 @@ class ApiController extends AbstractController
                 ["error" => "Maximum number is 8000"],
                 JsonResponse::HTTP_BAD_REQUEST
             );
+        } elseif (gettype($max) != "integer") {
+            return new JsonResponse(
+                ["error" => "Maximum load needs to be a integer"],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
         }
 
 
