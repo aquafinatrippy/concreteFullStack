@@ -1,18 +1,44 @@
-<div class="container">
-  <div class="container__item">
-    <form class="form">
-      <input type="number" class="form__field" placeholder="Max load" #load />
-      <button
-        (click)="Onenter(load.value)"
-        type="button"
-        class="btn btn--primary uppercase"
-      >
-        Search
-      </button>
-    </form>
+<div *ngIf="show == true; else hide" class="infoCont">
+  <button (click)="back()" type="button" class="btn btn--primary uppercase">
+    BACK
+  </button>
+
+  <h1>Transport total price: {{ tranPrice }} €</h1>
+  <br>
+  <h3>Items that got loaded on truck</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Weight</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>
+          {{ product.name }}
+        </td>
+        <td>
+          {{ product.weight }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #hide>
+  <div class="container">
+    <div class="container__item">
+      <form class="form">
+        <input type="number" class="form__field" placeholder="Max load" #load />
+        <button
+          (click)="Onenter(load.value)"
+          type="button"
+          class="btn btn--primary uppercase"
+          step="1000"
+        >
+          ADD TRUCK
+        </button>
+      </form>
+    </div>
   </div>
-</div>
-<!-- <div *ngIf="show == true; else hide">
-  <app-loaded-truck></app-loaded-truck>
-</div>
-<ng-template #hide></ng-template> -->
+</ng-template>

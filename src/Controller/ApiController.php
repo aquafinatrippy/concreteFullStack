@@ -146,6 +146,6 @@ class ApiController extends AbstractController
         }
 
 
-        return new JsonResponse(["truckId" => $truck->getId(), "loadedWeight" => $data], JsonResponse::HTTP_CREATED);
+        return new JsonResponse(["truckId" => $truck->getId(), "loadedWeight" => $data, "transportTotal" => $transPrice + count($res)], JsonResponse::HTTP_CREATED);
     }
 }

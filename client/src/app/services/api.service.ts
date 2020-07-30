@@ -9,14 +9,9 @@ import { environment } from '../../environments/environment';
 })
 export class ApiService {
   private url = `${environment.apiUrl}/addTruck`;
-  private productsUrl = `${environment.apiUrl}/trucks`;
-  private resUrl = `${environment.apiUrl}/newest`;
+  private resUrl = `${environment.apiUrl}/truck/`;
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Truck[]> {
-    const headers = { 'content-type': 'application/json' };
-    return this.http.get<Truck[]>(this.productsUrl, { headers: headers });
-  }
 
   addTruck(nr) {
     let objData = {
@@ -26,7 +21,8 @@ export class ApiService {
     return this.http.post<{}>(this.url, objData);
   }
 
-  results(): Observable<Truck[]> {
-    return this.http.get<Truck[]>(this.resUrl);
+
+  results(id): Observable<Truck[]> {
+    return this.http.get<Truck[]>(this.resUrl+id);
   }
 }

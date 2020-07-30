@@ -9,25 +9,29 @@ import { Truck } from '../../models/truck';
 })
 export class AddTruckComponent implements OnInit {
   obj: {};
-  trucks: Truck[];
+  products: any[];
   show: boolean;
+  tranPrice: number;
 
   constructor(private serv: ApiService) {}
 
-  ngOnInit(): void {
-    this.getTrucks();
-  }
+  ngOnInit(): void {}
 
-  getTrucks() {
-    this.serv.getProducts().subscribe((data) => {
-      this.trucks = data;
+  getTrucks(id) {
+    this.serv.results(id).subscribe((data) => {
+      this.products = data.data;
+      console.log(data);
     });
+  }
+  back(){
+    this.show = false;
   }
 
   Onenter(val1) {
     this.serv.addTruck(parseInt(val1)).subscribe((data) => {
       console.log(data);
-      this.getTrucks();
+      this.getTrucks(data.truckId);
+      this.tranPrice = data.transportTotal;
     });
     this.show = true;
   }

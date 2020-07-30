@@ -6,10 +6,9 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AddTruckComponent } from './components/add-truck/add-truck.component';
 import { FormsModule } from '@angular/forms';
-import { LoadedTruckComponent } from './components/loaded-truck/loaded-truck.component';
 
 @NgModule({
-  declarations: [AppComponent, AddTruckComponent, LoadedTruckComponent],
+  declarations: [AppComponent, AddTruckComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
