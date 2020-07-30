@@ -4,7 +4,7 @@
   </button>
 
   <h1>Transport total price: {{ tranPrice }} €</h1>
-  <br>
+  <br />
   <h3>Items that got loaded on truck</h3>
   <table>
     <thead>
@@ -34,7 +34,8 @@
           (click)="Onenter(load.value)"
           type="button"
           class="btn btn--primary uppercase"
-          step="1000"
+          max="8000"
+          min="1000"
         >
           ADD TRUCK
         </button>
@@ -42,3 +43,6 @@
     </div>
   </div>
 </ng-template>
+<div *ngIf="error">
+  <h4 style="color: red; text-align: center;">{{ error }}</h4>
+</div>

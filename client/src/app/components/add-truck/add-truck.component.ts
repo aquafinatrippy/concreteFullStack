@@ -11,6 +11,7 @@ export class AddTruckComponent implements OnInit {
   products: Array<any>;
   show: boolean;
   tranPrice: Array<any>;
+  error: string;
 
   constructor(private serv: ApiService) {}
 
@@ -29,11 +30,17 @@ export class AddTruckComponent implements OnInit {
   }
 
   Onenter(val1) {
-    this.serv.addTruck(parseInt(val1)).subscribe((data) => {
-      console.log(data);
-      this.getTrucks(data.truckId);
-      this.tranPrice = data.transportTotal;
-    });
-    this.show = true;
+    if (parseInt(val1) < 1000) {
+      this.error = 'Enter higher number, starts from 1000';
+    } else if (parseInt(val1) > 1000) {
+      this.error = 'Enter lower number, maximum is 8000';
+    } else {
+      this.serv.addTruck(parseInt(val1)).subscribe((data) => {
+        console.log(data);
+        this.getTrucks(data.truckId);
+        this.tranPrice = data.transportTotal;
+      });
+      this.show = true;
+    }
   }
 }
