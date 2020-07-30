@@ -24,7 +24,7 @@ Run in terminal: "npm install -g @angular/cli" to get it<br>
 Node js is needed <br>
 https://nodejs.org/en/download/
 
-# How to run project on local device
+# How to run back-end on local device
 
 Open terminal/cmd and go folder, where you would like project to be<br/><br/>
 Then run "git clone git@github.com:aquafinatrippy/concreteFullStack.git"<br/><br/>
