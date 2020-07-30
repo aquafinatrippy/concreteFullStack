@@ -8,7 +8,7 @@ import { ApiService } from '../../services/api.service';
 })
 export class AddTruckComponent implements OnInit {
   obj: {};
-  products;
+  products: Array<any>;
   show: boolean;
   tranPrice: Array<any>;
 
@@ -23,6 +23,8 @@ export class AddTruckComponent implements OnInit {
     });
   }
   back() {
+    this.products = [];
+    this.tranPrice = [];
     this.show = false;
   }
 
