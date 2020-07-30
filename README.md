@@ -3,13 +3,26 @@
 Test assignment, created using symfony<br>
 This is only rest-api, front-end link: "https://github.com/aquafinatrippy/ConcreteClient"
 
-# Requirements
+# Backend required software
 
 Git <br/>
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git<br><br>
 composer <br/>
+https://getcomposer.org/download/<br><br>
 PHP<br/>
+or use stack like: xampp, lamp etc... <br>
+https://www.w3schools.com/php/php_install.asp<br><br>
 MySql<br/>
+If you have some php stack then you have mysql aswell<br>
+else: https://dev.mysql.com/downloads/installer/<br><br>
 VsCode<br/>
+https://code.visualstudio.com/
+
+# Front-end required software
+Angular cli is needed.<br>
+Run in terminal: "npm install -g @angular/cli" to get it<br>
+Node js is needed <br>
+https://nodejs.org/en/download/
 
 # How to run project on local device
 
