@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { Truck } from '../../models/truck';
 
 @Component({
   selector: 'app-add-truck',
@@ -9,9 +8,9 @@ import { Truck } from '../../models/truck';
 })
 export class AddTruckComponent implements OnInit {
   obj: {};
-  products: any[];
+  products;
   show: boolean;
-  tranPrice: number;
+  tranPrice: Array<any>;
 
   constructor(private serv: ApiService) {}
 
@@ -23,7 +22,7 @@ export class AddTruckComponent implements OnInit {
       console.log(data);
     });
   }
-  back(){
+  back() {
     this.show = false;
   }
 

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Truck } from '../models/truck';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -12,17 +10,15 @@ export class ApiService {
   private resUrl = `${environment.apiUrl}/truck/`;
   constructor(private http: HttpClient) {}
 
-
   addTruck(nr) {
     let objData = {
-      max: nr
+      max: nr,
     };
     console.log(objData);
-    return this.http.post<{}>(this.url, objData);
+    return this.http.post<any>(this.url, objData);
   }
 
-
-  results(id): Observable<Truck[]> {
-    return this.http.get<Truck[]>(this.resUrl+id);
+  results(id) {
+    return this.http.get<any>(this.resUrl + id);
   }
 }
