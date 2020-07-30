@@ -32,9 +32,10 @@ export class AddTruckComponent implements OnInit {
   Onenter(val1) {
     if (parseInt(val1) < 1000) {
       this.error = 'Enter higher number, starts from 1000';
-    } else if (parseInt(val1) > 1000) {
+    } else if (parseInt(val1) > 8000) {
       this.error = 'Enter lower number, maximum is 8000';
     } else {
+      this.error = null;
       this.serv.addTruck(parseInt(val1)).subscribe((data) => {
         console.log(data);
         this.getTrucks(data.truckId);
