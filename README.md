@@ -35,8 +35,8 @@ Open .env file and change DATABASE_URL=mysql://DB_USER_HERE:DB_PASSWORD_HERE@DB_
 Run "composer install"<br/><br/>
 Start up MySql<br/><br/>
 Run "php bin/console doctrine:database:create" in terminal/cmd <br> <br>
-run "php bin/console make:migration"<br>
-run "php bin/console doctrine:migrations:migrate"<br>
+Run "php bin/console make:migration"<br>
+Run "php bin/console doctrine:migrations:migrate"<br>
 Run "php bin/console doctrine:fixtures:load" to get mock data to database <br> <br>
 When its done then run "symfony serve" to start application<br/><br/>
 In console theres url. Thats server local running url<br/><br/>
