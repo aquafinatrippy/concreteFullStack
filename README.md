@@ -39,5 +39,11 @@ run "php bin/console make:migration"<br>
 run "php bin/console doctrine:migrations:migrate"<br>
 Run "php bin/console doctrine:fixtures:load" to get mock data to database <br> <br>
 When its done then run "symfony serve" to start application<br/><br/>
-In console theres url.Thats server local running url<br/><br/>
+In console theres url. Thats server local running url<br/><br/>
 
+# How to run front-end on local device
+
+Open terminal/cmd and go to project folder then "cd client" <br>
+Run command: "npm install"<br>
+With code editor open client/src/environments/environments and change apiUrl to back-end url.<br>
+Run command: "ng serve"
